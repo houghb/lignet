@@ -87,21 +87,22 @@ net = NeuralNet(
 # Any of these parameters can be optimized with gridsearch
 # net.get_params()
 param_grid = {'hidden0_num_units': range(4, 40),
-              'update_learning_rate': [0.1, 0.3, 0.5, 0.7],
-              'max_epochs': [65]
+              'update_learning_rate': [0.1, 0.3, 0.5, 0.7]
               }
-grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=50)
-grid_search.fit(x_train[:1000,:], y_train[:1000,:])
+grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=20,
+                           pre_dispatch='2*n_jobs',
+                           scoring='mean_squared_error')
+grid_search.fit(x_train[:2000,:], y_train[:2000,:])
 
 # this shows you the scores for all the different searches
-grid_search.grid_scores_
+print grid_search.grid_scores_
 
 # quickly show which was the estimator with the best score
 print 'The best estimator was:\n'
-grid_search.best_params_
+print grid_search.best_params_
 print '\nIt had these param values:\n'
 # Get the parameter values for the grid search estimator with the best score.
-grid_search.best_estimator_.get_all_params_values()
+print grid_search.best_estimator_.get_all_params_values()
 
 
 # This is the NeuralNet object with the best fit
