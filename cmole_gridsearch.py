@@ -1,11 +1,14 @@
 import numpy as np
 import pandas as pd
+try:
+    import cPickle as pickle
+except:
+    import pickle
 
 import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
-
 from sklearn import preprocessing
 from sklearn.grid_search import GridSearchCV
 
@@ -87,3 +90,7 @@ net.fit(x_train[:1000,:], y_train[:1000,:])
 print(net.score(x_train, y_train))
 # The table that is printed shows the current loss (MSE) on the training and
 # validation sets.
+
+net.save_params_to('network_params.dat')
+with open('ann_objects.pkl', 'wb') as pkl:
+    pickle.dump([net)
