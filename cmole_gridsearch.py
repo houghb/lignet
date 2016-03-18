@@ -5,7 +5,6 @@ try:
 except:
     import pickle
 
-import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
@@ -84,13 +83,28 @@ net = NeuralNet(
             # see https://github.com/dnouri/kfkd-tutorial/blob/master/kfkd.py
             )
 
-# The table that is printed shows the current loss (MSE) on the training and
-# validation sets.
-net.fit(x_train[:1000,:], y_train[:1000,:])
-print(net.score(x_train, y_train))
-# The table that is printed shows the current loss (MSE) on the training and
-# validation sets.
+# Use get_params to get all the hyperparameters that make up the estimator.
+# Any of these parameters can be optimized with gridsearch
+# net.get_params()
+param_grid = {'hidden0_num_units': range(4, 40),
+              'update_learning_rate': [0.1, 0.3, 0.5, 0.7],
+              'max_epochs': [65]
+              }
+grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=50)
+grid_search.fit(x_train[:1000,:], y_train[:1000,:])
 
-net.save_params_to('network_params.dat')
+# this shows you the scores for all the different searches
+grid_search.grid_scores_
+
+# quickly show which was the estimator with the best score
+print 'The best estimator was:\n'
+grid_search.best_params_
+print '\nIt had these param values:\n'
+# Get the parameter values for the grid search estimator with the best score.
+grid_search.best_estimator_.get_all_params_values()
+
+
+# This is the NeuralNet object with the best fit
+grid_search.best_estimator_.save_params_to('best_params.dat')
 with open('ann_objects.pkl', 'wb') as pkl:
-    pickle.dump([net)
+    pickle.dump([net, param_grid, grid_search], pkl)
