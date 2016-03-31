@@ -60,14 +60,14 @@ net = NeuralNet(
             layers=[
                 ('input', layers.InputLayer),
                 ('hidden0', layers.DenseLayer),
-#                 ('hidden1', layers.DenseLayer),
+                ('hidden1', layers.DenseLayer),
                 ('output', layers.DenseLayer)
                 ],
             input_shape=(None, x_train.shape[1]),
             hidden0_num_units=15,
             hidden0_nonlinearity=nonlinearities.sigmoid,
-#             hidden1_num_units=17,
-#             hidden1_nonlinearity=nonlinearities.sigmoid,
+            hidden1_num_units=17,
+            hidden1_nonlinearity=nonlinearities.sigmoid,
             output_num_units=y_train.shape[1],
             output_nonlinearity=nonlinearities.linear,
             regression=True,
@@ -75,7 +75,7 @@ net = NeuralNet(
 #             update_momentum=0.9,
             update_learning_rate=0.5,
             verbose=1,
-            max_epochs=100,
+            max_epochs=500,
 #             train_split=TrainSplit(eval_size=0.2),
 #             objective_l2=0.0001
             # use on_epoch_finished to update the learning rate during training
@@ -86,19 +86,20 @@ net = NeuralNet(
 # Use get_params to get all the hyperparameters that make up the estimator.
 # Any of these parameters can be optimized with gridsearch
 # net.get_params()
-param_grid = {'hidden0_num_units': range(10, 50),
+param_grid = {'hidden0_num_units': range(2, 50),
+              'hidden1_num_units': range(2, 50),
               'update_learning_rate': [0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 2]
               }
 grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=20,
                            pre_dispatch='2*n_jobs',
                            scoring='mean_squared_error')
-grid_search.fit(x_train[:2000,:], y_train[:2000,:])
+grid_search.fit(x_train[:8000,:], y_train[:8000,:])
 
 # quickly show which was the estimator with the best score
 print 'The best estimator was:\n'
 print grid_search.best_params_
 
 # This is the NeuralNet object with the best fit
-grid_search.best_estimator_.save_params_to('best_params.dat')
-with open('ann_objects.pkl', 'wb') as pkl:
+grid_search.best_estimator_.save_params_to('double_hidden_best_params.dat')
+with open('double_hidden_ann_objects.pkl', 'wb') as pkl:
     pickle.dump([net, param_grid, grid_search], pkl)
