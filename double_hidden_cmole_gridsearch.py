@@ -86,9 +86,9 @@ net = NeuralNet(
 # Use get_params to get all the hyperparameters that make up the estimator.
 # Any of these parameters can be optimized with gridsearch
 # net.get_params()
-param_grid = {'hidden0_num_units': range(2, 50),
-              'hidden1_num_units': range(2, 50),
-              'update_learning_rate': [0.1, 0.3, 0.5, 0.7, 0.9, 1.1, 1.3, 2]
+param_grid = {'hidden0_num_units': range(18, 30),
+              'hidden1_num_units': range(18, 30),
+              'update_learning_rate': [0.5, 0.9, 2]
               }
 grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=20,
                            pre_dispatch='2*n_jobs',
