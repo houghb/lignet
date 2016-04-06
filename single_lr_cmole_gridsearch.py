@@ -59,6 +59,7 @@ y_test = y_scaler.transform(y_test)
 net = NeuralNet(
             layers=[
                 ('input', layers.InputLayer),
+                ('hidden0', layers.DenseLayer),
                 ('output', layers.DenseLayer)
                 ],
             input_shape=(None, x_train.shape[1]),
