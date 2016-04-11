@@ -96,5 +96,6 @@ net.fit(x_train[:, :], y_train[:, :])
 # Save trained network and other relevant objects for later
 net.save_params_to('ann_params.dat')
 with open('ann_objects.pkl', 'wb') as pkl:
-    pickle.dump([net, x_scaler, y_scaler], pkl)
+    pickle.dump([net, x_scaler, y_scaler, x_train, y_train, x_test, y_test],
+                pkl)
 
