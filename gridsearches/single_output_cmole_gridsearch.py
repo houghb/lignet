@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import pandas as pd
 try:
@@ -5,6 +6,7 @@ try:
 except:
     import pickle
 
+import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
