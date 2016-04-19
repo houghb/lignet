@@ -19,7 +19,6 @@ from lasagne import layers
 from lasagne import nonlinearities
 from nolearn.lasagne import NeuralNet
 from sklearn import preprocessing
-from sklearn.grid_search import GridSearchCV
 
 # specify the seed for random number generation so we can get consistent
 # shuffling and initialized weights
@@ -96,6 +95,6 @@ net.fit(x_train[:, :], y_train[:, :])
 # Save trained network and other relevant objects for later
 net.save_params_to('ann_params.dat')
 with open('ann_objects.pkl', 'wb') as pkl:
-    pickle.dump([net, x_scaler, y_scaler, x_train, y_train, x_test, y_test],
+    pickle.dump([net, x_scaler, y_scaler],
                 pkl)
 
