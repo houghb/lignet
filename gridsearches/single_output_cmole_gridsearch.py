@@ -15,7 +15,7 @@ from sklearn.grid_search import GridSearchCV
 
 # get the arguments passed by the user from CLI
 # first argument passed is the column of the output measure to train
-output_col = sys.argv[1]
+output_col = int(sys.argv[1])
 
 # specify the seed for random number generation so we can get consistent
 # shuffling and initialized weights
