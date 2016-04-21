@@ -82,11 +82,6 @@ net = NeuralNet(
             update_learning_rate=0.1,
             verbose=1,
             max_epochs=5000,
-#             train_split=TrainSplit(eval_size=0.2),
-#             objective_l2=0.0001
-            # use on_epoch_finished to update the learning rate during training
-            # or use early stopping.
-            # see https://github.com/dnouri/kfkd-tutorial/blob/master/kfkd.py
             )
 
 # Train the network parameters using the entire training set

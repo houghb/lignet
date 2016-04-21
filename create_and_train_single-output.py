@@ -89,7 +89,7 @@ net = NeuralNet(
             regression=True,
             update_learning_rate=learning_rate,
             verbose=1,
-            max_epochs=4000,
+            max_epochs=2000,
             update=lasagne.updates.adagrad,
             )
 
