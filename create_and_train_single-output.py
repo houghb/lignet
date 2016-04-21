@@ -35,8 +35,8 @@ np.random.seed(6509)
 
 # Read the training data for the neural network
 # Input data is 250000x4 and output data is 250000x32
-X = pd.read_csv('../../parameters_250000.txt', sep=' ')
-Y = pd.read_csv('../../results.txt', sep=' ', index_col=False)
+X = pd.read_csv('../parameters_250000.txt', sep=' ')
+Y = pd.read_csv('../results.txt', sep=' ', index_col=False)
 # These functional groups do not exist in my model
 Y = Y.drop(['light_aromatic_C-C', 'light_aromatic_methoxyl'], axis=1)
 y_columns = Y.columns.values
@@ -89,7 +89,7 @@ net = NeuralNet(
             regression=True,
             update_learning_rate=learning_rate,
             verbose=1,
-            max_epochs=5000,
+            max_epochs=4000,
             update=lasagne.updates.adagrad,
             )
 
