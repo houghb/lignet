@@ -24,7 +24,7 @@ import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from lasagne.nonlinearities import ScaledTanH
-from nolearn.lasagne import NeuralNet
+from nolearn.lasagne import NeuralNet, TrainSplit
 from sklearn import preprocessing
 
 # first argument passed is the column of the output measure to train
@@ -132,7 +132,7 @@ net = NeuralNet(
             output_nonlinearity=nonlinearities.linear,
             regression=True,
             verbose=1,
-            max_epochs=1000,
+            max_epochs=2000,
             update=lasagne.updates.adagrad,
             #update_learning_rate=learning_rate,
             on_epoch_finished=[EarlyStopping(patience=100)],
@@ -147,4 +147,4 @@ net.fit(x_train[:, :], y_train2[:])
 # Save trained network and other relevant objects for later
 with open('updated_ann-%s-%s.pkl' % (output_col, y_columns[output_col]),
           'wb') as pkl:
-    pickle.dump([net], pkl)
+    pickle.dump([net, x_scaler, y_scaler], pkl)
