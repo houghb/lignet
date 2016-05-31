@@ -11,7 +11,8 @@ import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from lasagne.nonlinearities import ScaledTanH
-from nolearn.lasagne import NeuralNet, TrainSplit, RememberBestWeights
+from nolearn.lasagne import NeuralNet, TrainSplit, RememberBestWeights, \
+	BatchIterator
 from sklearn import preprocessing
 
 script_start_time = time.time()
