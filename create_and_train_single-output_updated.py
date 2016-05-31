@@ -24,7 +24,7 @@ import lasagne
 from lasagne import layers
 from lasagne import nonlinearities
 from lasagne.nonlinearities import ScaledTanH
-from nolearn.lasagne import NeuralNet, TrainSplit
+from nolearn.lasagne import NeuralNet, TrainSplit, RememberBestWeights
 from sklearn import preprocessing
 
 # first argument passed is the column of the output measure to train
@@ -76,6 +76,10 @@ y_test = y_scaler.transform(y_test)
 # set up the Scaled tanh parameters.  See nonlinearities.py for usage notes.
 # I am following the guidance of LeCun et al. for these values
 scaled_tanh = ScaledTanH(scale_in=2./3, scale_out=1.7159)
+
+# Use RememberBestWeights to use the parameters that yielded the best loss
+# on the validation set.
+rbw = RememberBestWeights()
 
 # implement early stopping so we don't have to reach max_epochs
 class EarlyStopping(object):
@@ -132,10 +136,11 @@ net = NeuralNet(
             output_nonlinearity=nonlinearities.linear,
             regression=True,
             verbose=1,
-            max_epochs=2000,
+            max_epochs=5000,
             update=lasagne.updates.adagrad,
             #update_learning_rate=learning_rate,
-            on_epoch_finished=[EarlyStopping(patience=100)],
+            on_epoch_finished=[EarlyStopping(patience=1000), rbw],
+            on_training_finished=[rbw.restore],
             train_split=TrainSplit(eval_size=0.3),
             )
 
