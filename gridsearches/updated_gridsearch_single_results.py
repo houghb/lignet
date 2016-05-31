@@ -14,6 +14,7 @@ from lasagne.nonlinearities import ScaledTanH
 from nolearn.lasagne import NeuralNet, TrainSplit, RememberBestWeights, \
 	BatchIterator
 from sklearn import preprocessing
+from sklearn.grid_search import GridSearchCV
 
 script_start_time = time.time()
 
