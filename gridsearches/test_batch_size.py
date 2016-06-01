@@ -20,6 +20,7 @@ script_start_time = time.time()
 
 # first argument passed is the column of the output measure to train
 output_col = int(sys.argv[1])
+batch = int(sys.argv[2])
 
 # specify the seed for random number generation so we can get consistent
 # shuffling and initialized weights
@@ -128,29 +129,16 @@ net = NeuralNet(
 #            on_epoch_finished=[EarlyStopping(patience=100), rbw],
 #            on_training_finished=[rbw.restore],
             train_split=TrainSplit(eval_size=0.3),
-            batch_iterator_train=BatchIterator(batch_size=128),
+            batch_iterator_train=BatchIterator(batch_size=batch),
             )
-
-# Set up the gridsearch
-param_grid = {'hidden0_num_units': range(5, 32),
-              'hidden1_num_units': range(5, 32),
-              }
-
-grid_search = GridSearchCV(net, param_grid, verbose=0, n_jobs=20,
-                           pre_dispatch='2*n_jobs',
-                           scoring='mean_squared_error')
 
 # select only the output measure you want to train
 y_train2 = y_train[:, output_col]
 # Train the network parameters using a subset of the entire training set
-grid_search.fit(x_train[:6000, :], y_train2[:6000])
+net.fit(x_train[:6000, :], y_train2[:6000])
 
 script_running_time = time.time() - script_start_time
 
-with open('updated_gridsearch_single_report.txt', 'a') as report:
-    print >>report, ('%s - %s took % sec\n\n' % (output_col, y_columns[output_col],
-                                                 script_running_time))
-    for entry in grid_search.grid_scores_:
-       print >>report, entry
-    print >>report, '\n\n%s' % grid_search.best_params_
+print 'column %s - batch size %s - time %s' % (output_col, batch, 
+                                               script_running_time)
 
