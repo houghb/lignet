@@ -152,5 +152,5 @@ with open('updated_gridsearch_single_report.txt', 'a') as report:
                                                  script_running_time))
     for entry in grid_search.grid_scores_:
        print >>report, entry
-    print >>report, '\n\n%s' % grid_search.best_params_
+    print >>report, '\n\nbest: %s - %s' % (output_col, grid_search.best_params_)
 
