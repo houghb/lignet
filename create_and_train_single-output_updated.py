@@ -25,6 +25,7 @@ from lasagne import layers
 from lasagne import nonlinearities
 from lasagne.nonlinearities import ScaledTanH
 from nolearn.lasagne import NeuralNet, TrainSplit, RememberBestWeights
+from nolearn.lasagne import BatchIterator
 from sklearn import preprocessing
 
 # first argument passed is the column of the output measure to train
@@ -142,6 +143,7 @@ net = NeuralNet(
             on_epoch_finished=[EarlyStopping(patience=1000), rbw],
             on_training_finished=[rbw.restore],
             train_split=TrainSplit(eval_size=0.3),
+            #batch_iterator_train=BatchIterator(batch_size=128),
             )
 
 # select only the output measure you want to train
