@@ -2,6 +2,9 @@
 This file creates the network that I've determined is best based on the
 gridsearch results, then it trains that network using the full training set.
 
+To run this file for the full network (and train all the output measures at 
+once), pass 999 as the first argument.
+
 Gridsearch results for each output measure are in the `gridsearches` folder,
 and encoded into the bash scripts that call this file script, which passes
 them as arguments to this file.
@@ -101,7 +104,7 @@ if __name__ == '__main__':
     rbw = RememberBestWeights()
 
     # Set the number of output units
-    if output_col == 'all':
+    if output_col == 999:
         out_units = y_train.shape[1]
     else:
         out_units = 1
@@ -148,7 +151,7 @@ if __name__ == '__main__':
 
     # select only the output measure(s) you want to train, fit the network
     # with all the training data, and pickle the result.
-    if output_col == 'all':
+    if output_col == 999:
         net.fit(x_train[:, :], y_train[:, :])
         with open('trained_networks/full_net.pkl', 'wb') as pkl:
             pickle.dump([net, x_scaler, y_scaler], pkl)
