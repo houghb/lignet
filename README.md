@@ -1,4 +1,4 @@
-### Artificial Neural Network for Lignin Pyrolysis
+### Artificial Neural Networks for Lignin Pyrolysis
 ----
 <p align="center">
    <img src="doc/images/lignet.png">
