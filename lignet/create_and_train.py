@@ -141,7 +141,7 @@ if __name__ == '__main__':
                 output_nonlinearity=nonlinearities.linear,
                 regression=True,
                 verbose=1,
-                max_epochs=5000,
+                max_epochs=6000,
                 update=lasagne.updates.adagrad,
                 on_epoch_finished=[EarlyStopping(patience=500), rbw],
                 on_training_finished=[rbw.restore],
