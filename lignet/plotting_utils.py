@@ -44,8 +44,9 @@ def plot_one_learning_curve(output_col, nets):
 
     return None
 
+
 def pplot_one_output(ax, net, x_train, y_train, x_test, y_test, output_col,
-                             title, ub=None):
+                     title, ub=None):
     """
     Make a parity plot for the training (blue), validation (green),
     and test (red) set predictions of a specific output measure.
@@ -102,18 +103,14 @@ def pplot_one_output(ax, net, x_train, y_train, x_test, y_test, output_col,
             ax.plot([np.min(yt[:ub]), np.max(yt[:ub])],
                     [np.min(yt[:ub]), np.max(yt[:ub])], c='black')
             ax.scatter(y_pred_train[:ub].flatten(), yt[:ub].flatten(),
-                                   s=0.1, alpha=0.16,
-                                   c='b', marker='x', label='train')
-            ax.scatter(y_pred_valid[:ub].flatten(),
-                                   yv[:ub].flatten(),
-                                   s=0.1, alpha=0.16,
-                                   c='g', marker='x', label='valid')
+                       s=0.1, alpha=0.16, c='b', marker='x', label='train')
+            ax.scatter(y_pred_valid[:ub].flatten(), yv[:ub].flatten(),
+                       s=0.1, alpha=0.16, c='g', marker='x', label='valid')
             ax.scatter(y_pred_test[:ub].flatten(),
-                                   y_test[:ub, output_col].flatten(),
-                                   s=0.1, alpha=0.16,
-                                   c='r', marker='x', label='test')
+                       y_test[:ub, output_col].flatten(),
+                       s=0.1, alpha=0.16, c='r', marker='x', label='test')
             ax.set_title('%s - r**2=%s, %s, %s' %
-                                     (title, r2_train, r2_valid, r2_test))
+                         (title, r2_train, r2_valid, r2_test))
     except AttributeError:
         ax[output_col].plot([np.min(yt[:ub]), np.max(yt[:ub])],
                             [np.min(yt[:ub]), np.max(yt[:ub])], c='black')
@@ -245,7 +242,7 @@ def hplot_one_output(yt, yv, ytest, ytpred, yvpred, ytestpred,
     test_mse = []
     for i, value in enumerate(ytest):
         test_mse.append(mean_squared_error([ytest[i]],
-                                            [ytestpred[i]]))
+                                           [ytestpred[i]]))
     try:
         if ax.numRows:
             ax.hist([train_mse, valid_mse, test_mse], bins=50,
@@ -255,7 +252,7 @@ def hplot_one_output(yt, yv, ytest, ytpred, yvpred, ytestpred,
             ax.legend()
     except AttributeError:
         ax[ax_pos].hist([train_mse, valid_mse, test_mse], bins=50,
-                            stacked=True, label=['train', 'valid', 'test'],
-                            log=True)
+                        stacked=True, label=['train', 'valid', 'test'],
+                        log=True)
         ax[ax_pos].set_title('%s' % title)
         ax[ax_pos].legend()

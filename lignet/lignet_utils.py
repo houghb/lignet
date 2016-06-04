@@ -37,8 +37,8 @@ def gen_train_test(params='default', results='default'):
                the relative or absolute path to the text file of parameters
                used in the input layer of the network
     results  : str, optional
-               the relative or absolute path to the text file of expected values
-               for the output layer of the network
+               the relative or absolute path to the text file of expected
+               values for the output layer of the network
 
     Returns
     -------
@@ -79,7 +79,6 @@ def gen_train_test(params='default', results='default'):
     Y = pd.read_csv(results, sep=' ', index_col=False)
     # These functional groups do not exist in my model
     Y = Y.drop(['light_aromatic_C-C', 'light_aromatic_methoxyl'], axis=1)
-    y_columns = Y.columns.values
 
     X = X.values.astype(np.float32)
     Y = Y.values.astype(np.float32)
@@ -122,7 +121,7 @@ def load_nets(myglob):
 
     Parameters
     ----------
-    glob    : str
+    myglob  : str
               the unix-style pattern (including abs or rel path) for the
               filenames you want to load.  Wildcards accepted.
 
@@ -199,7 +198,7 @@ def calc_r_squared(nets, x_train, y_train, x_test, y_test):
             # calculate r**2 values
             r2_train = round(r2_score(yt[:, i], y_pred_train[:, i]), 5)
             r2_valid = round(r2_score(yv[:, i], y_pred_valid[:, i]), 5)
-            r2_test= round(r2_score(y_test[:, i], y_pred_test[:, i]), 5)
+            r2_test = round(r2_score(y_test[:, i], y_pred_test[:, i]), 5)
             r_squared[title] = r2_train, r2_valid, r2_test
 
     else:
@@ -215,7 +214,7 @@ def calc_r_squared(nets, x_train, y_train, x_test, y_test):
             # calculate r**2 values
             r2_train = round(r2_score(yt[:], y_pred_train[:]), 5)
             r2_valid = round(r2_score(yv[:], y_pred_valid[:]), 5)
-            r2_test= round(r2_score(y_test[:, key], y_pred_test[:]), 5)
+            r2_test = round(r2_score(y_test[:, key], y_pred_test[:]), 5)
             r_squared[title] = r2_train, r2_valid, r2_test
 
     return r_squared
