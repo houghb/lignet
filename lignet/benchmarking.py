@@ -177,7 +177,7 @@ def get_random_ligpy_args():
     initial_T = float(args.split(' ')[3])
     heat_rate = float(args.split(' ')[4])
     maximum_T = float(args.split(' ')[5])
-    plant = str(args.split(' ')[8])
+    plant = str(args.split(' ')[8]).rstrip()
 
     return (end_time, output_time_step, cool_time, initial_T, heat_rate,
             maximum_T, plant)
@@ -242,7 +242,7 @@ def predict_ligpy(end_time=end_time, output_time_step=output_time_step,
     # Load the program parameters and results from the selected folder
     (end_time, output_time_step, initial_T, heating_rate, max_T, atol, rtol,
      plant, cool_time, y, t, T, specieslist, speciesindices,
-     indices_to_species) = load_results('results_dir')
+     indices_to_species) = load_results('.')
 
     # create a new matrix of mass fractions (instead of concentrations)
     m = copy.deepcopy(y)
