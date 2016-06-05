@@ -20,7 +20,7 @@ from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 
 from create_and_train import EarlyStopping
-from constants import Y_COLUMNS
+from constant import Y_COLUMNS
 
 
 def gen_train_test(params='default', results='default'):
@@ -159,7 +159,8 @@ def load_nets(myglob):
 
 def calc_r_squared(nets, x_train, y_train, x_test, y_test):
     """
-    Calculate the r squared value for the training, validation, and test sets.
+    Calculate the r squared value of neural nets for the training, validation,
+    and test sets.
 
     Parameters
     ----------
@@ -216,6 +217,51 @@ def calc_r_squared(nets, x_train, y_train, x_test, y_test):
             r2_valid = round(r2_score(yv[:], y_pred_valid[:]), 5)
             r2_test = round(r2_score(y_test[:, key], y_pred_test[:]), 5)
             r_squared[title] = r2_train, r2_valid, r2_test
+
+    return r_squared
+
+
+def calc_r_squared_dt(dtr, x_train, x_test, y_train, y_test):
+    """
+    Calculate the r squared value from the decision tree regressor for the
+    training and test sets.
+
+    Parameters
+    ----------
+    dtr     : sklearn.tree.tree.DecisionTreeRegressor
+              a trained decision tree
+    x_train : numpy.ndarray
+              the scaled training data used for the input layer of the
+              network (standardized to have zero mean and unit variance)
+    y_train : numpy.ndarray
+              the scaled training data used for the output layer of the
+              network (standardized to have zero mean and unit variance)
+    x_test  : numpy.ndarray
+              scaled data you can use as a test set that the network has never
+              seen before.  It is 20% of the data in params.
+    y_test  : numpy.ndarray
+              scaled expected output values that the network has not seen
+              before to use with x_test.
+
+    Returns
+    -------
+    r_squared : dict
+                a dictionary with the r^2 values for each output measure
+    """
+
+    r_squared = {}
+    ytrainpred = dtr.predict(x_train)
+    ytestpred = dtr.predict(x_test)
+    for i, title in enumerate(Y_COLUMNS):
+        r2_train = round(r2_score(y_train[:, i], ytrainpred[:, i]), 5)
+        r2_test = round(r2_score(y_test[:, i], ytestpred[:, i]), 5)
+        r_squared[title] = r2_train, r2_test
+
+    r2_train_overall = round(r2_score(y_train.ravel(),
+                                      ytrainpred.ravel()), 5)
+    r2_test_overall = round(r2_score(y_test.ravel(),
+                                     ytestpred.ravel()), 5)
+    r_squared['ALL'] = r2_train_overall, r2_test_overall
 
     return r_squared
 

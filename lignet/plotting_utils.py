@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
-from constants import Y_COLUMNS
+from constant import Y_COLUMNS
 
 
 def plot_one_learning_curve(output_col, nets):
