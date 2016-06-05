@@ -37,7 +37,7 @@ from create_and_train import EarlyStopping
 
 # Pre-load the testing data and machine learning estimators
 x_train, x_test, y_train, y_test, x_scaler, y_scaler = gen_train_test()
-nets = load_nets('trained_networks/final*')
+nets = load_nets('trained_networks/updated*')
 full_net = load_nets('trained_networks/full*')
 with open('trained_networks/decision_tree.pkl', 'rb') as pkl:
     dtr_full = pickle.load(pkl)[0]
@@ -271,10 +271,14 @@ if __name__ == '__main__':
                 number=1000))
     print('predict_decision_tree: %s sec per call' % (tot_time/1000))
 
-    for i in range(1, 6):
+    num_runs = 1000
+    times = np.zeros(num_runs)
+    for i in range(0, num_runs):
         setup_predict_ligpy()
         tot_time = (timeit.timeit('predict_ligpy()',
                     setup='from __main__ import predict_ligpy',
                     number=1))
-        print('ligpy run %s : %s sec' % (i, tot_time))
+        times[i] = tot_time
         teardown_predict_ligpy()
+    print('predict_ligpy: %s sec per call' % times.mean())
+
