@@ -132,9 +132,7 @@ def setup_predict_ligpy():
     None
     """
     call('cp ligpy_benchmarking_files/sa_compositionlist.dat '
-         '../../../ligpy/ligpy/data/compositionlist.dat;'
-         'mkdir benchmarking_temp;'
-         'cd benchmarking_temp', shell=True
+         '../../../ligpy/ligpy/data/compositionlist.dat;', shell=True
          )
 
 
@@ -150,8 +148,9 @@ def teardown_predict_ligpy():
     -------
     None
     """
-    call('cd ..;', shell=True)
-    call('rm -rf benchmarking_temp', shell=True)
+    call('rm -rf bsub.c bsub.o ddat.in fort.11 f.out greg10.in jacobian.c '
+         'jacobian.o model.c model.o net_rates.def parest rates.def '
+         'results_dir/', shell=True)
 
 
 def get_random_ligpy_args():
