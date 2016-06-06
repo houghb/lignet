@@ -143,7 +143,7 @@ if __name__ == '__main__':
                 verbose=1,
                 max_epochs=6000,
                 update=lasagne.updates.adagrad,
-                on_epoch_finished=[EarlyStopping(patience=500), rbw],
+                on_epoch_finished=[EarlyStopping(patience=900), rbw],
                 on_training_finished=[rbw.restore],
                 train_split=TrainSplit(eval_size=0.3),
                 #batch_iterator_train=BatchIterator(batch_size=128),
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     else:
         y_train2 = y_train[:, output_col]
         net.fit(x_train[:, :], y_train2[:])
-        with open('trained_networks/%s-%s_net.pkl' % (output_col,
-                                                      y_columns[output_col]),
+        with open('trained_networks/final-%s-%s_net.pkl' %
+                          (output_col, y_columns[output_col]),
                   'wb') as pkl:
             pickle.dump([net, x_scaler, y_scaler], pkl)

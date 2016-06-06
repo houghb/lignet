@@ -134,25 +134,18 @@ def load_nets(myglob):
     files_list = glob.glob(myglob)
     nets = {}
 
-# UNCOMMENT THIS WHEN USING THE FINAL SET OF RESULTS
     if [x for x in files_list if 'full' in x]:
         with open(files_list[0], 'rb') as pkl:
             nets['all'] = pickle.load(pkl)[0]
-# UNCOMMENT THIS WHEN USING THE FINAL SET OF RESULTS
-#     else:
-#         for filename in files_list:
-#             output_col = int(filename.split('/')[-1].split('-')[0])
-#             with open(filename, 'rb') as pkl:
-#                 nets[output_col] = pickle.load(pkl)[0]
-
-#     if [x for x in files_list if 'ann_objects_updated' in x]:
-#         with open(files_list[0], 'rb') as pkl:
-#             nets['all'] = pickle.load(pkl)[0]
     else:
         for filename in files_list:
             output_col = int(filename.split('/')[-1].split('-')[1])
             with open(filename, 'rb') as pkl:
                 nets[output_col] = pickle.load(pkl)[0]
+# THIS IS CODE TO READ OLDER FILES
+#     if [x for x in files_list if 'ann_objects_updated' in x]:
+#         with open(files_list[0], 'rb') as pkl:
+#             nets['all'] = pickle.load(pkl)[0]
 
     return nets
 
