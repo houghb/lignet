@@ -72,6 +72,25 @@ def predict_full_net(input_data=rand_input, net=full_net['all']):
     return net.predict(input_data)
 
 
+def predict_single_net(input_data=rand_input, net=nets[5]):
+    """ 
+    Predict the value for a single output measure.
+
+    Parameters
+    ----------
+    input_data : numpy.ndarray, optional
+                 an array of input values to predict.  This can be a single
+                 row or many rows.
+    net        : nolearn.lasagne.base.NeuralNet, optional
+                 a trained neural net for a single output measure
+    Returns
+    -------
+    predicted : numpy.ndarray
+                an array of the predicted values
+    """
+    return net.predict(input_data)
+
+
 def predict_30_single_nets(input_data=rand_input, nets=nets):
     """
     Predict the output measures using 30 individually trained neural nets.
@@ -260,6 +279,12 @@ if __name__ == '__main__':
                 setup='from __main__ import predict_full_net',
                 number=1000))
     print('predict_full_net: %s sec per call' % (tot_time/1000))
+
+    tot_time = (timeit.timeit('predict_single_net()',
+                setup='from __main__ import predict_single_net',
+                number=1000))
+    print('predict_single_net: %s sec per call' % (tot_time/1000))
+
 
     tot_time = (timeit.timeit('predict_30_single_nets()',
                 setup='from __main__ import predict_30_single_nets',
