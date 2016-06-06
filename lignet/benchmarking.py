@@ -21,20 +21,6 @@ from lignet_utils import gen_train_test, load_nets
 from create_and_train import EarlyStopping
 
 
-# do I need to convert predicted values from nets back to those predicted by
-# ligpy? (undo the scaling?)
-
-# should I pre-load the machine learning estimators like this, or load them
-# in their functions?  loading the decision tree takes a bit of time...
-
-# Is there any reason (for the estimators) to do the tests with more than one
-# row of training data?  The ligpy model is predicting just one row.
-# Should I run the ligpy model on sets of training data that span the range of
-# conditions, end times, etc (or just choose one row randomly to use in this
-# module, then repeat the benchmarking tests several times?)
-
-# how many times should I repeat the timeit tests for each function?
-
 # Pre-load the testing data and machine learning estimators
 x_train, x_test, y_train, y_test, x_scaler, y_scaler = gen_train_test()
 nets = load_nets('trained_networks/updated*')
