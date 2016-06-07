@@ -123,22 +123,58 @@ def predict_decision_tree(input_data=rand_input, tree=dtr_full):
     return tree.predict(input_data)
 
 
-def setup_predict_ligpy():
+def setup_predict_ligpy(end_time=end_time, output_time_step=output_time_step,
+                  cool_time=cool_time, initial_T=initial_T,
+                  heat_rate=heat_rate, maximum_T=maximum_T, plant=plant):
     """
-    Create the proper environment to run predict_ligpy() and move into the
-    appropriate directory.
+    Create the proper environment to run predict_ligpy() and set up the
+    kinetic model.
 
     Parameters
     ----------
-    None
+    standard arguments passed to `ligpy.py`
 
     Returns
     -------
-    None
+    standard arguments for `ddasac.run_ddasac()`
     """
     call('cp ligpy_benchmarking_files/sa_compositionlist.dat '
          '../../../ligpy/ligpy/data/compositionlist.dat;', shell=True
          )
+
+    absolute_tolerance = float(1e-10)
+    relative_tolerance = float(1e-8)
+
+    # These are the files and paths that will be referenced in this program:
+    (file_completereactionlist, file_completerateconstantlist,
+     file_compositionlist) = utils.set_paths()
+    working_directory = 'results_dir'
+    if not os.path.exists(working_directory):
+        os.makedirs(working_directory)
+
+    # pickle the arguments used for this program to reference during analysis
+    prog_params = [end_time, output_time_step, initial_T, heat_rate, maximum_T,
+                   absolute_tolerance, relative_tolerance, plant, cool_time]
+    with open('%s/prog_params.pkl' % working_directory, 'wb') as pkl:
+        pickle.dump(prog_params, pkl)
+
+    # Get lists of all the species in the kinetic scheme and their indices
+    specieslist = utils.get_specieslist(file_completereactionlist)
+    # Get kmatrix
+    kmatrix = utils.build_k_matrix(file_completerateconstantlist)
+
+    # Set the initial composition of the lignin polymer
+    PLIGC_0, PLIGH_0, PLIGO_0 = utils.define_initial_composition(
+        file_compositionlist, plant)
+
+    # Set the initial conditions for the DDASAC solver
+    y0_ddasac = np.zeros(len(specieslist))
+    y0_ddasac[:3] = [PLIGC_0, PLIGH_0, PLIGO_0]
+
+    return (file_completereactionlist, kmatrix, working_directory,
+                      y0_ddasac, specieslist, absolute_tolerance,
+                      relative_tolerance, initial_T, heat_rate, end_time,
+                      maximum_T, output_time_step, cool_time)
 
 
 def teardown_predict_ligpy():
@@ -192,9 +228,10 @@ def get_random_ligpy_args():
     maximum_T, plant) = get_random_ligpy_args()
 
 
-def predict_ligpy(end_time=end_time, output_time_step=output_time_step,
-                  cool_time=cool_time, initial_T=initial_T,
-                  heat_rate=heat_rate, maximum_T=maximum_T, plant=plant):
+def predict_ligpy(file_completereactionlist, kmatrix, working_directory,
+                      y0_ddasac, specieslist, absolute_tolerance,
+                      relative_tolerance, initial_T, heat_rate, end_time,
+                      maximum_T, output_time_step, cool_time):
     """
     This function is a modified version of `ligpy.py` in the `ligpy` package.
     It sets up and solves the ODE model for lignin pyrolysis, then calculates
@@ -209,34 +246,6 @@ def predict_ligpy(end_time=end_time, output_time_step=output_time_step,
     -------
     None
     """
-    absolute_tolerance = float(1e-10)
-    relative_tolerance = float(1e-8)
-
-    # These are the files and paths that will be referenced in this program:
-    (file_completereactionlist, file_completerateconstantlist,
-     file_compositionlist) = utils.set_paths()
-    working_directory = 'results_dir'
-    if not os.path.exists(working_directory):
-        os.makedirs(working_directory)
-
-    # pickle the arguments used for this program to reference during analysis
-    prog_params = [end_time, output_time_step, initial_T, heat_rate, maximum_T,
-                   absolute_tolerance, relative_tolerance, plant, cool_time]
-    with open('%s/prog_params.pkl' % working_directory, 'wb') as pkl:
-        pickle.dump(prog_params, pkl)
-
-    # Get lists of all the species in the kinetic scheme and their indices
-    specieslist = utils.get_specieslist(file_completereactionlist)
-    # Get kmatrix
-    kmatrix = utils.build_k_matrix(file_completerateconstantlist)
-
-    # Set the initial composition of the lignin polymer
-    PLIGC_0, PLIGH_0, PLIGO_0 = utils.define_initial_composition(
-        file_compositionlist, plant)
-
-    # Set the initial conditions for the DDASAC solver
-    y0_ddasac = np.zeros(len(specieslist))
-    y0_ddasac[:3] = [PLIGC_0, PLIGH_0, PLIGO_0]
     # Solve the model with DDASAC
     ddasac.run_ddasac(file_completereactionlist, kmatrix, working_directory,
                       y0_ddasac, specieslist, absolute_tolerance,
@@ -270,7 +279,6 @@ if __name__ == '__main__':
                 setup='from __main__ import predict_single_net',
                 number=1000))
     print('predict_single_net: %s sec per call' % (tot_time/1000))
-
 
     tot_time = (timeit.timeit('predict_30_single_nets()',
                 setup='from __main__ import predict_30_single_nets',
