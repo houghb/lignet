@@ -123,6 +123,40 @@ def predict_decision_tree(input_data=rand_input, tree=dtr_full):
     return tree.predict(input_data)
 
 
+def get_random_ligpy_args():
+    """
+    Get the arguments from a random row of ligpy_args to pass to
+    predict_ligpy.
+
+    Returns
+    -------
+    end_time
+    output_time_step
+    cool_time
+    initial_T
+    heat_rate
+    maximum_T
+    plant
+    """
+    rand_index = np.random.randint(0, 249999)
+    args = ligpy_args[rand_index]
+    end_time = float(args.split(' ')[0])
+    output_time_step = float(args.split(' ')[1])
+    cool_time = int(args.split(' ')[2])
+    initial_T = float(args.split(' ')[3])
+    heat_rate = float(args.split(' ')[4])
+    maximum_T = float(args.split(' ')[5])
+    plant = str(args.split(' ')[8]).rstrip()
+
+    return (end_time, output_time_step, cool_time, initial_T, heat_rate,
+            maximum_T, plant)
+
+
+# the set of arguments for the first predict_ligpy() call
+(end_time, output_time_step, cool_time, initial_T, heat_rate,
+    maximum_T, plant) = get_random_ligpy_args()
+
+
 def setup_predict_ligpy(end_time=end_time, output_time_step=output_time_step,
                   cool_time=cool_time, initial_T=initial_T,
                   heat_rate=heat_rate, maximum_T=maximum_T, plant=plant):
@@ -194,44 +228,21 @@ def teardown_predict_ligpy():
          'results_dir/', shell=True)
 
 
-def get_random_ligpy_args():
-    """
-    Get the arguments from a random row of ligpy_args to pass to
-    predict_ligpy.
-
-    Returns
-    -------
-    end_time
-    output_time_step
-    cool_time
-    initial_T
-    heat_rate
-    maximum_T
-    plant
-    """
-    rand_index = np.random.randint(0, 249999)
-    args = ligpy_args[rand_index]
-    end_time = float(args.split(' ')[0])
-    output_time_step = float(args.split(' ')[1])
-    cool_time = int(args.split(' ')[2])
-    initial_T = float(args.split(' ')[3])
-    heat_rate = float(args.split(' ')[4])
-    maximum_T = float(args.split(' ')[5])
-    plant = str(args.split(' ')[8]).rstrip()
-
-    return (end_time, output_time_step, cool_time, initial_T, heat_rate,
-            maximum_T, plant)
+# These must be defined to load the module
+(file_completereactionlist, kmatrix, working_directory,
+    y0_ddasac, specieslist, absolute_tolerance,
+    relative_tolerance, initial_T, heat_rate, end_time,
+    maximum_T, output_time_step, cool_time) = setup_predict_ligpy()
 
 
-# the set of arguments for the first predict_ligpy() call
-(end_time, output_time_step, cool_time, initial_T, heat_rate,
-    maximum_T, plant) = get_random_ligpy_args()
-
-
-def predict_ligpy(file_completereactionlist, kmatrix, working_directory,
-                      y0_ddasac, specieslist, absolute_tolerance,
-                      relative_tolerance, initial_T, heat_rate, end_time,
-                      maximum_T, output_time_step, cool_time):
+def predict_ligpy(file_completereactionlist=file_completereactionlist, 
+                  kmatrix=kmatrix, working_directory=working_directory,
+                  y0_ddasac=y0_ddasac, specieslist=specieslist, 
+                  absolute_tolerance=absolute_tolerance,
+                  relative_tolerance=relative_tolerance, 
+                  initial_T=initial_T, heat_rate=heat_rate, end_time=end_time,
+                  maximum_T=maximum_T, output_time_step=output_time_step, 
+                  cool_time=cool_time):
     """
     This function is a modified version of `ligpy.py` in the `ligpy` package.
     It sets up and solves the ODE model for lignin pyrolysis, then calculates
@@ -293,7 +304,12 @@ if __name__ == '__main__':
     num_runs = 1000
     times = np.zeros(num_runs)
     for i in range(0, num_runs):
-        setup_predict_ligpy()
+        (end_time, output_time_step, cool_time, initial_T, heat_rate,
+            maximum_T, plant) = get_random_ligpy_args()
+        (file_completereactionlist, kmatrix, working_directory,
+            y0_ddasac, specieslist, absolute_tolerance,
+            relative_tolerance, initial_T, heat_rate, end_time,
+            maximum_T, output_time_step, cool_time) = setup_predict_ligpy()
         tot_time = (timeit.timeit('predict_ligpy()',
                     setup='from __main__ import predict_ligpy',
                     number=1))
