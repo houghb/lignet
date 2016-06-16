@@ -22,8 +22,12 @@ from create_and_train import EarlyStopping
 
 
 # Pre-load the testing data and machine learning estimators
+global y_scaler
 x_train, x_test, y_train, y_test, x_scaler, y_scaler = gen_train_test()
-nets = load_nets('trained_networks/updated*')
+global transform_mat
+transform_mat = np.zeros((1, 30))
+
+nets = load_nets('trained_networks/final*')
 full_net = load_nets('trained_networks/full*')
 with open('trained_networks/decision_tree.pkl', 'rb') as pkl:
     dtr_full = pickle.load(pkl)[0]
@@ -55,7 +59,7 @@ def predict_full_net(input_data=rand_input, net=full_net['all']):
     predicted : numpy.ndarray
                 an array of the predicted values
     """
-    return net.predict(input_data)
+    return y_scaler.inverse_transform(net.predict(input_data))
 
 
 def predict_single_net(input_data=rand_input, net=nets[5]):
@@ -74,8 +78,9 @@ def predict_single_net(input_data=rand_input, net=nets[5]):
     predicted : numpy.ndarray
                 an array of the predicted values
     """
-    return net.predict(input_data)
-
+    pred = net.predict(input_data)
+    transform_mat[:, 5] = pred.ravel()
+    return y_scaler.inverse_transform(transform_mat)[:, 5]
 
 def predict_30_single_nets(input_data=rand_input, nets=nets):
     """
@@ -100,7 +105,7 @@ def predict_30_single_nets(input_data=rand_input, nets=nets):
     for i in nets.keys():
         predicted[:, i] = nets[i].predict(input_data).ravel()
 
-    return predicted
+    return y_scaler.inverse_transform(predicted)
 
 
 def predict_decision_tree(input_data=rand_input, tree=dtr_full):
@@ -120,7 +125,7 @@ def predict_decision_tree(input_data=rand_input, tree=dtr_full):
     predicted : numpy.ndarray
                 an array of the predicted values
     """
-    return tree.predict(input_data)
+    return y_scaler.inverse_transform(tree.predict(input_data))
 
 
 def get_random_ligpy_args():
