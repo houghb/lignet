@@ -1,0 +1,5 @@
+predict_full_net: 0.000168999910355 sec per call
+predict_single_net: 0.000174670219421 sec per call
+predict_30_single_nets: 0.00423637986183 sec per call
+predict_decision_tree: 0.000110560894012 sec per call
+predict_ligpy: 4.72457096386 sec per call
