@@ -64,9 +64,9 @@ train_sizes, train_scores, valid_scores = learning_curve(
             ('output', layers.DenseLayer)
             ],
         input_shape=(None, x_train.shape[1]),
-        hidden0_num_units=22,
+        hidden0_num_units=18,
         hidden0_nonlinearity=scaled_tanh,
-        hidden1_num_units=22,
+        hidden1_num_units=20,
         hidden1_nonlinearity=scaled_tanh,
         output_num_units=y_train.shape[1],
         output_nonlinearity=nonlinearities.linear,
@@ -79,7 +79,7 @@ train_sizes, train_scores, valid_scores = learning_curve(
         train_split=TrainSplit(eval_size=0.3),
         ),
     xt, yt,
-    train_sizes=[100, 500, 1500, 5000, 75000, 133333],
+    train_sizes=[500, 1500, 5000, 35000, 75000, 133333],
     scoring='mean_squared_error')
 
 train_scores_mean = np.mean(train_scores, axis=1)
@@ -87,21 +87,8 @@ train_scores_std = np.std(train_scores, axis=1)
 valid_scores_mean = np.mean(valid_scores, axis=1)
 valid_scores_std = np.std(valid_scores, axis=1)
 
-with open('learning_curve.pkl', 'wb') as pkl:
+with open('learning_curve_larger.pkl', 'wb') as pkl:
     pickle.dump([train_scores_mean, train_scores_std,
                  valid_scores_mean, valid_scores_std,
                  train_sizes], pkl)
 
-plt.figure()
-plt.title('Learning Curve')
-plt.xlabel("num_samples")
-plt.ylabel("MSE")
-
-plt.plot(train_sizes, -train_scores_mean, 'o-', label='train', color='r')
-plt.fill_between(train_sizes, -train_scores_mean - train_scores_std,
-                -train_scores_mean + train_scores_std, alpha=0.2, color='r')
-plt.plot(train_sizes, -valid_scores_mean, 'o-', label='valid', color='g')
-plt.fill_between(train_sizes, -valid_scores_mean - valid_scores_std,
-                -valid_scores_mean + valid_scores_std, alpha=0.2, color='g')
-plt.legend(loc=0)
-plt.savefig('learning_curve.png')
