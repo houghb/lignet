@@ -79,7 +79,7 @@ train_sizes, train_scores, valid_scores = learning_curve(
         train_split=TrainSplit(eval_size=0.3),
         ),
     xt, yt,
-    train_sizes=[500, 1500, 5000, 35000, 75000, 133333],
+    train_sizes=[500, 1500, 5000, 15000, 35000, 75000, 133333],
     scoring='mean_squared_error')
 
 train_scores_mean = np.mean(train_scores, axis=1)
