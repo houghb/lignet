@@ -1,6 +1,7 @@
 """
 Train the decision tree that we've determined gives the best performance on
-our training data.  See the decision_tree ipython notebook for more details.
+our training data.  See the analyze_decision_tree ipython notebook for more
+details.
 """
 
 import cPickle as pickle
