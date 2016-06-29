@@ -79,7 +79,6 @@ if __name__ == '__main__':
     test_fraction = 0.2
     training = combined[:-int(test_fraction * combined.shape[0]), :]
     test = combined[-int(test_fraction * combined.shape[0]):, :]
-
     x_train = training[:, :4]
     y_train = training[:, 4:]
     x_test = test[:, :4]
@@ -119,7 +118,7 @@ if __name__ == '__main__':
     # setting the first dimension of input_shape to None translates to using a
     # variable batch size
     # .
-    # the initial weights are initialized from a uniform distribution with a
+    # the weights are initialized from a uniform distribution with a
     # cleverly chosen interval - Lasagne figures out this interval using
     # Glorot-style initialization
     # (http://jmlr.org/proceedings/papers/v9/glorot10a/glorot10a.pdf)
