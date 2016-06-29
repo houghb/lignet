@@ -157,7 +157,8 @@ def get_random_ligpy_args():
             maximum_T, plant)
 
 
-# the set of arguments for the first predict_ligpy() call
+# these need to be defined before the next function, but they will be
+# overwritten
 (end_time, output_time_step, cool_time, initial_T, heat_rate,
     maximum_T, plant) = get_random_ligpy_args()
 
