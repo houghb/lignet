@@ -116,8 +116,8 @@ def load_nets(myglob):
     Load a dictionary of trained neural networks with filenames
     matching a unix-style pattern.  Filenames of networks trained for
     individual output measures should be named,
-    `OutputCol-NameOfOutputCol_net.pkl` and filenames for a network trained
-    for the complete set of output measures should be `full_net.pkl`.
+    `final-OutputCol-NameOfOutputCol_net.pkl` and filenames for a network
+    trained for the complete set of output measures should be `full_net.pkl`.
 
     Parameters
     ----------
@@ -142,10 +142,6 @@ def load_nets(myglob):
             output_col = int(filename.split('/')[-1].split('-')[1])
             with open(filename, 'rb') as pkl:
                 nets[output_col] = pickle.load(pkl)[0]
-# THIS IS CODE TO READ OLDER FILES
-#     if [x for x in files_list if 'ann_objects_updated' in x]:
-#         with open(files_list[0], 'rb') as pkl:
-#             nets['all'] = pickle.load(pkl)[0]
 
     return nets
 
