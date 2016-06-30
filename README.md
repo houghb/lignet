@@ -9,7 +9,7 @@ Comprehensive models of biomass pyrolysis are needed to develop renewable fuels 
 
 *lignet* was written to generate results for our 2016 paper, **Application of machine learning to pyrolysis reaction networks: reducing model solution time to enable process optimization** (a link to the paper will be added when it is published).
 
-**Cite lignet:** link coming soon
+**Cite lignet:** zenodo_badge
 
 -------
 ### Software dependencies and license information
